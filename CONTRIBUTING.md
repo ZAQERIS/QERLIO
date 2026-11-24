@@ -74,7 +74,7 @@ Additional honesty requirements:
 - Every number and non-trivial factual claim MUST cite its reproducible command or committed log/fixture. If unmeasured, write `not measured`.
 - Never return unloaded or catalog-only models from `/v1/models` or `/api/tags` as loaded/available inference models, and never label theoretical formulas as live runtime measurements.
 - For **`ZAQERIS/ZAQERIS-7B` (`zaqeris_7b`)**, every public description MUST state that it was trained from scratch and that only the tokenizer is reused from Qwen2; NEVER describe it as a Qwen architecture.
-- Zero hardware disclosure anywhere public (no GPU names, VRAM, GPU-hours, CPU specs, thread counts, or host HUD screenshots), zero personal names or team size, zero `ZAQION` / `zaqion_dialectic` references, zero `.gguf` / weight files committed, zero private absolute paths or secrets, and zero unsupported marketing slogans (`blazing`, `state-of-the-art`, `production-ready`, `fully supported`, or `officially supports` without verified Section 2 evidence).
+- Zero hardware disclosure anywhere public (no GPU/CPU model names, device memory sizes, compute-hour figures, thread counts, or host HUD screenshots), zero personal names or team size, zero legacy/internal codenames outside `zqn_12b`, zero `.gguf` / weight files committed, zero private absolute paths or secrets, and zero unsupported promotional adjectives or slogan claims lacking Section 2 evidence.
 
 ---
 

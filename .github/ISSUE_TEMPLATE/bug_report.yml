@@ -7,7 +7,7 @@ body:
     attributes:
       value: |
         Thank you for reporting an issue.
-        **Privacy & Policy Reminder:** Do NOT paste GPU/CPU model names, VRAM amounts, GPU-hours, HUD screenshots exposing host specs, private local filesystem paths, model weights, or secret tokens.
+        **Privacy & Policy Reminder:** Do NOT paste GPU/CPU model names, device memory capacities, compute-hour totals, HUD screenshots exposing host specs, private local filesystem paths, model weights, or secret tokens.
   - type: textarea
     id: description
     attributes:

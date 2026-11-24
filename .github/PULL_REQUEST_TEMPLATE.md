@@ -11,7 +11,7 @@ Before checking the gate below, confirm all of the following:
 - Every number and non-trivial claim is backed by a reproducible command or committed fixture (`not measured` where unmeasured).
 - Synthetic/toy tests are labeled explicitly as synthetic; opt-in real-weight tests do not fake-pass via silent toy fallbacks.
 - `ZAQERIS/ZAQERIS-7B` descriptions state clearly that it was trained from scratch and only the tokenizer is reused from Qwen2.
-- Zero hardware details (GPU/CPU specs, VRAM, GPU-hours, HUD screenshots), zero `ZAQION`, zero personal names/team size/private paths/secrets/weights.
+- Zero hardware details (GPU/CPU specs, device memory amounts, compute-hour totals, HUD screenshots), zero deprecated internal codenames outside `zqn_12b`, zero personal names/team size/private paths/secrets/weights.
 
 **Do not merge or release until the gate is complete (including non-author G4 approval).**
 
