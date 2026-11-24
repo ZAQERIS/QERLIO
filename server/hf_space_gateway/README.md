@@ -15,9 +15,8 @@ license: apache-2.0
 OpenAI-compatible FastAPI/Gradio HTTP gateway scaffold (`POST /v1/chat/completions`, `GET /v1/models`, `GET /healthz`) with optional bearer-token authentication and a configurable 7-day trial expiration check.
 
 ## Scope & Honest Status
-- **HTTP Gateway Scaffold Only:** This service provides the HTTP routing, secret token verification (`QERLIO_GATEWAY_SECRET`), and trial expiration timer (`GATEWAY_LAUNCH_TIMESTAMP`).
-- **No Model Weights Attached by Default:** Until a live inference engine is connected, `/v1/chat/completions` returns an explicit stub notice (`"simulated": true`, `"usage": null`) and does not execute or impersonate any model.
-- **Model Metadata Listed:** Lists `NousResearch/Hermes-4.3-36B` (`ByteDance Seed-OSS-36B-Base` / `SeedOssForCausalLM`, 524,288 context window; GGUF repository: `NousResearch/Hermes-4.3-36B-GGUF`) and `ZAQERIS/ZAQERIS-7B`.
+- **HTTP Gateway Scaffold Only:** This service provides HTTP routing, secret token verification (`QERLIO_GATEWAY_SECRET`), and trial expiration checks (`GATEWAY_LAUNCH_TIMESTAMP`).
+- **No Model Weights Attached by Default:** Until a live inference engine is connected, `GET /v1/models` returns an empty loaded list (`"backend_loaded": false`, `"data": []`), `GET /healthz` returns `"loaded_models": []`, and `POST /v1/chat/completions` returns an explicit stub notice (`"simulated": true`, `"usage": null`) without executing or impersonating any model.
 
 ## Usage with OpenAI Python SDK
 ```python
@@ -29,7 +28,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="NousResearch/Hermes-4.3-36B",
+    model="unloaded-gateway-stub",
     messages=[{"role": "user", "content": "Ping gateway stub."}],
     stream=False
 )

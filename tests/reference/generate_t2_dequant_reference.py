@@ -1,6 +1,6 @@
 """Offline T2 Reference Generator using installed `gguf` (`gguf-py`).
 
-Per ZAQERIS Ai Directive Section 3.1, this script runs offline ONCE to extract
+Per ZAQERIS AI Directive Section 3.1, this script runs offline ONCE to extract
 real quantized blocks from `models/hermes-4_3_36b-Q4_K_M.gguf` (`Q4_K`, `Q6_K`,
 `F32`) plus deterministic seeded sample blocks across all quant types supported by
 `gguf.quants.dequantize`, saving expected float32 outputs to

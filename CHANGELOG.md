@@ -10,13 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.3.1] - 2026-11-24
 
 ### Changed
-- **Honest `tested` Registry Criteria (`registry/model_architectures.json`, `scripts/build_architectures_registry.py`, `tests/test_architectures_registry.py`):** Recategorized `qwen35` (prior `610.40s` 4-token run used an unofficial UD quant `Qwen3.8-27B-UD-Q4_K_M.gguf`) and ZAQERIS catalog entries (`zaqeris_axiom`, `zqn_12b`, `zaqeris_7b`, which lack >=64-token official-weight execution logs) to `experimental`. Only `seed_36b` (`NousResearch/Hermes-4.3-36B-GGUF`, SHA-256 `17823599694fa3503ef54bf748d5078c6ce881f4d01616cafa255dc05d215a08`) remains `tested` (`1` tested, `183` experimental, `184` total).
+- **Honest `tested` Registry Criteria (`registry/model_architectures.json`, `scripts/build_architectures_registry.py`, `tests/test_architectures_registry.py`):** Recategorized `qwen35` (prior `610.40s` 4-token run used an unofficial UD quant `Qwen3.8-27B-UD-Q4_K_M.gguf`) and ZAQERIS catalog entries (`zaqeris_axiom` / `ZAQERIS/ZAQERIS_AXIOM`, `zqn_12b` / `ZAQERIS/ZQN-12B`, and `zaqeris_7b` / `ZAQERIS/ZAQERIS-7B` — trained from scratch; only the tokenizer is reused from Qwen2 — which lack `>= 64`-token official-weight logs) to `experimental`. Only `seed_36b` (`NousResearch/Hermes-4.3-36B-GGUF`, SHA-256 `17823599694fa3503ef54bf748d5078c6ce881f4d01616cafa255dc05d215a08`) remains `tested` (`1` tested, `183` experimental, `184` total).
 - **Relabeled Synthetic Tests & Added Opt-In Real-Weight Test:** Explicitly labeled [`tests/test_t4_to_t10_engine.py`](tests/test_t4_to_t10_engine.py) and [`tests/test_qwen35_engine.py`](tests/test_qwen35_engine.py) as synthetic toy-GGUF unit tests, removed the silent toy fallback from `test_qwen35_engine.py`, and added opt-in [`tests/test_real_hermes_36b_optin.py`](tests/test_real_hermes_36b_optin.py) (`QERLIO_RUN_REAL_HERMES=1`).
-- **Sanitizer Coverage & Stale Doc Fixes:** Expanded multi-row C GEMM kernel exercise (`m=5`) in `tests/cpp_safety_test.cpp` under CI ASan+UBSan (`detect_leaks=1:halt_on_error=1`), added a static CI-coverage test for all `core/inference/*.c` files, updated stale architecture/ADR/matrix docs, marked historical archive reports clearly, corrected the `[0.3.0]` heading date to `2026-11-22`, and removed the nonexistent `develop` branch trigger from `.github/workflows/ci.yml`.
+- **API, Telemetry & Dependency Cleanup (C1–C14):** Fixed broken relative links in `docs/models/HERMES_4_3_36B.md` and added `scripts/check_markdown_links.py`; updated `/v1/models` and `/api/tags` in `server/local_api/server.py` and `server/hf_space_gateway/app.py` to list loaded models only (empty when unloaded); labeled `quant_matrix.py` / `/v1/telemetry/hud` formula estimates explicitly as theoretical and omitted host RAM/CPU figures by default; aligned `third_party/DEPENDENCY_INVENTORY.md`, `THREAT_MODEL.md`, and `RISK_REGISTER.md` with the actual tree; standardized `ZAQERIS AI` and `ZAQERIS/ZAQERIS-7B` naming; made `.gitignore` pure ASCII; documented tag `v0.2.2` as tag-only; and added `scripts/check_forbidden_content.py` + `tests/test_repo_cleanliness.py`.
+- **Sanitizer Coverage & Stale Doc Fixes:** Expanded multi-row C GEMM kernel exercise (`m=5`) in `tests/cpp_safety_test.cpp` under CI ASan+UBSan (`detect_leaks=1:halt_on_error=1`), added a static CI-coverage test for all `core/inference/*.c` files, updated stale architecture/ADR/matrix docs, clarified inline historical archive annotations throughout Phase 0/1 documents, corrected the `[0.3.0]` heading date to `2026-11-22`, and removed the nonexistent `develop` branch trigger from `.github/workflows/ci.yml`.
 - **Version Bump:** Updated runtime version strings to `0.3.1`.
 
 ### Added
-- **Root `LICENSE` File:** Added the full official Apache License, Version 2.0 text at [`LICENSE`](LICENSE).
+- **Root `LICENSE`, Packaging & Community Files:** Added the full official Apache License, Version 2.0 text at [`LICENSE`](LICENSE), added [`pyproject.toml`](pyproject.toml), [`requirements.txt`](requirements.txt), [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md), [`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md), and [`.github/ISSUE_TEMPLATE/bug_report.yml`](.github/ISSUE_TEMPLATE/bug_report.yml), and updated [`CONTRIBUTING.md`](CONTRIBUTING.md) with sanitizer, tested-definition, and PR-gate requirements.
 - **Committed Real-Weight Record:** Added [`tests/fixtures/hermes_4_3_36b_qerlio_verification_record.json`](tests/fixtures/hermes_4_3_36b_qerlio_verification_record.json) storing exact T1–T9 prompts, token IDs, and outputs for `NousResearch/Hermes-4.3-36B-GGUF`.
 
 ### Known Limitations
@@ -46,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ---
 
 ## [0.2.2] - 2026-11-20
+
+> *(Release note: `v0.2.2` exists as git tag `v0.2.2` only and was not published as a standalone GitHub Release.)*
 
 ### Added
 - **Hermes 4.3 36B (`Seed-OSS`) Chat Template & Tag Parser (`core/models/hermes_adapter.py`):** Prompt formatter and output tag parser for [`NousResearch/Hermes-4.3-36B`](https://huggingface.co/NousResearch/Hermes-4.3-36B) and [`NousResearch/Hermes-4.3-36B-GGUF`](https://huggingface.co/NousResearch/Hermes-4.3-36B-GGUF) (`ByteDance Seed-OSS-36B-Base` / `SeedOssForCausalLM`, `model_type: seed_oss`, 524,288 context length) using the `Llama-3-Chat` template (`<seed:bos>`, `<|start_header_id|>`, `<|end_header_id|>`, `<|eot_id|>`).
@@ -84,7 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Architecture Catalog:** Registry of model architecture metadata covering 10 architectural families.
-- **Built-in Agent Mode:** Sandboxed ReAct loop with native tool calling support for ZAQERIS-7B, ZQN-12B, and OpenAI function calling formats.
+- **Built-in Agent Mode:** Sandboxed ReAct loop with native tool calling support for `ZAQERIS/ZAQERIS-7B` (trained from scratch; only the tokenizer is reused from Qwen2), `ZAQERIS/ZQN-12B`, and OpenAI function calling formats.
 - **Safe Sandbox Tools:** Calculator, Sandboxed Python Evaluator, Workspace File Search, and Synthetic Web Search.
 - **Universal Multi-API Gateway:** Local API server supporting OpenAI, Anthropic, and Ollama protocol compatibility.
 - **Developer HUD:** Web-based architecture explorer and agent studio interface.

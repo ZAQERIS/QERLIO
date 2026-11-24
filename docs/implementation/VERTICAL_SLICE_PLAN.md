@@ -1,28 +1,24 @@
 > **Historical Archive Note (v0.3.1):** Phase 1 initial planning snapshot (`2026-11-19`) prior to the v0.3.0 from-scratch native engine (`core/inference/`) which replaced the deferred `llama.cpp` plan in Slice 2.
 
-# QERLIO Runtime — Phase 1 Vertical Slice Execution Plan
+# [HISTORICAL ARCHIVE — 2026-11-19] QERLIO Runtime — Phase 1 Vertical Slice Execution Plan
 
-**Objective:** Implement the first verifiable, end-to-end vertical slice of QERLIO:
-1. Pure C ABI interface implementation (`src/qerlio.cpp`).
-2. Robust, bounded GGUF metadata reader & SHA-256 verifier (`core/model_registry/gguf_verifier.cpp`).
-3. CLI inspection tool (`tools/model-inspect`).
-4. Unit and conformance tests (`tests/`).
+**Historical Note:** This Phase-1 execution plan (`2026-11-19`) is archived for historical traceability. Slice 2 (`llama.cpp` integration) was **superseded in `v0.3.0`** by QERLIO's from-scratch native GGUF engine in [`core/inference/`](../../core/inference/).
 
 ---
 
-## 1. Scope and Boundaries
+## 1. Historical Scope & Boundaries (2026-11-19 Archive)
 
-- **In Scope for Slice 1:**
+- **In Scope for Slice 1 (`2026-11-19`):**
   - Complete memory lifecycle (`create` -> `load` -> `session` -> `cancel` -> `destroy`).
   - Strict GGUF header parsing with bounds validation (preventing buffer overflows and integer wraps).
   - SHA-256 cryptographic verification before loading.
-  - Mock/reference inference stream simulating token generation with atomic cancellation.
-  - Python-based verification test suite using the host's Python 3.12 + `gguf` library.
+  - Initial scaffolding stream simulation with atomic cancellation.
+  - Python-based verification test suite using test harness scripts.
   
-- **Deferred to Subsequent Slices:**
-  - Full tensor matrix multiplication kernels (delegated to pinned `llama.cpp` integration in Slice 2).
-  - Multi-backend GPU/Vulkan offloading (Slice 3).
-  - Android JNI bindings (Slice 4).
+- **Historical Slice-2+ Proposals (`2026-11-19` — Superseded):**
+  - *(Superseded in `v0.3.0`)* Initial draft considered delegating tensor matrix multiplication kernels to `llama.cpp` in Slice 2. That plan was **never implemented**; QERLIO instead implemented tensor loading, dequantization, C11 SIMD quantized GEMM (`native_gemm.c`), and forward execution from scratch under `core/inference/`.
+  - Multi-backend GPU/Vulkan offloading (unimplemented; CPU-only in `v0.3.1`).
+  - Android JNI bindings (planned).
 
 ---
 

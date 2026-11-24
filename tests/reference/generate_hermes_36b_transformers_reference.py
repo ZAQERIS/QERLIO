@@ -1,6 +1,6 @@
 """Offline T4/T5 Reference Generator using official HuggingFace `transformers` + `gguf-py`.
 
-Per ZAQERIS Ai Directive Section 3.1, this script runs strictly offline ONCE
+Per ZAQERIS AI Directive Section 3.1, this script runs strictly offline ONCE
 against `models/hermes-4_3_36b-Q4_K_M.gguf` (never imported or invoked by
 `core/inference/` at runtime). It instantiates HuggingFace `SeedOssDecoderLayer`,
 `SeedOssRMSNorm`, and `SeedOssRotaryEmbedding` one layer at a time using tensors
@@ -265,7 +265,7 @@ def main() -> None:
     out_payload = {
         "generator": {
             "command": f"python tests/reference/generate_hermes_36b_transformers_reference.py --qerlio-run <report.json>",
-            "torch_version": torch.__version__,
+            "torch_version": torch.__version__.split("+")[0],
             "transformers_version": importlib.metadata.version("transformers"),
             "gguf_version": importlib.metadata.version("gguf"),
             "numpy_version": np.__version__,

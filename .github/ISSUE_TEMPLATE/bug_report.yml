@@ -1,0 +1,43 @@
+name: Bug Report
+description: Report a reproducible issue in QERLIO Runtime
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue.
+        **Privacy & Policy Reminder:** Do NOT paste GPU/CPU model names, device memory capacities, compute-hour totals, HUD screenshots exposing host specs, private local filesystem paths, model weights, or secret tokens.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Clear summary of what happened vs what you expected.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: QERLIO Version / Commit SHA
+      placeholder: "v0.3.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: arch_tier
+    attributes:
+      label: Target Architecture Tier
+      description: Note that only `seed_36b` is `tested` under T-A..T-F in v0.3.1; all other 183 entries are `experimental`.
+      options:
+        - "seed_36b (tested)"
+        - "qwen35 (experimental)"
+        - "Other experimental catalog architecture"
+        - "Local API / CLI / Build / Docs"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproducible Command & Sanitized Output
+      description: Exact command executed (with paths sanitized) and observed traceback/output.
+    validations:
+      required: true

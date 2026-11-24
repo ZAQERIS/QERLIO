@@ -44,7 +44,7 @@ AGENT_RUNTIME = AgentRuntime(tool_registry=TOOL_REGISTRY)
 
 def load_native_model(
     model_path: str,
-    model_id: str = "NousResearch/Hermes-4.3-36B",
+    model_id: str = "loaded-local-gguf",
     max_context_length: Optional[int] = None,
     preload_weights: Optional[bool] = None,
 ) -> Union[SeedOssEngine, Qwen35Engine]:
@@ -81,7 +81,7 @@ class OpenAIChatMessage(BaseModel):
 
 
 class OpenAIChatRequest(BaseModel):
-    model: str = "qerlio-adaptive-balanced"
+    model: str = "qerlio-unloaded-stub"
     messages: List[OpenAIChatMessage]
     temperature: Optional[float] = 0.0
     top_p: Optional[float] = 0.95
@@ -102,7 +102,7 @@ class AnthropicMessage(BaseModel):
 
 
 class AnthropicRequest(BaseModel):
-    model: str = "qerlio-adaptive-balanced"
+    model: str = "qerlio-unloaded-stub"
     messages: List[AnthropicMessage]
     max_tokens: Optional[int] = 64
     temperature: Optional[float] = 0.0
@@ -113,13 +113,13 @@ class AnthropicRequest(BaseModel):
 
 
 class OllamaChatRequest(BaseModel):
-    model: str = "qerlio-adaptive-balanced"
+    model: str = "qerlio-unloaded-stub"
     messages: List[OpenAIChatMessage]
     stream: Optional[bool] = False
 
 
 class OllamaGenerateRequest(BaseModel):
-    model: str = "qerlio-adaptive-balanced"
+    model: str = "qerlio-unloaded-stub"
     prompt: str
     stream: Optional[bool] = False
 
@@ -131,13 +131,13 @@ class AgentExecuteRequest(BaseModel):
 
 class AgentRunRequest(BaseModel):
     prompt: str
-    model: Optional[str] = "zaqeris/zqn-12b"
+    model: Optional[str] = "qerlio-unloaded-stub"
     max_iterations: Optional[int] = 3
 
 
 class ModelLoadRequest(BaseModel):
     model_path: str
-    model_id: Optional[str] = "NousResearch/Hermes-4.3-36B"
+    model_id: Optional[str] = "loaded-local-gguf"
     max_context_length: Optional[int] = None
     preload_weights: Optional[bool] = True
 
@@ -160,13 +160,14 @@ def verify_token(authorization: Optional[str] = Header(None)):
 @app.get("/v1/health")
 @app.get("/healthz")
 def get_health():
-    ram = psutil.virtual_memory()
+    expose_host = os.environ.get("QERLIO_EXPOSE_HOST_METRICS") == "1"
+    ram = psutil.virtual_memory() if expose_host else None
     loaded_ids = [k for k in ACTIVE_MODELS.keys() if k != "default"]
     return {
         "status": "healthy",
         "runtime": "QERLIO Universal Gateway 0.3.1",
-        "cpu_usage_pct": psutil.cpu_percent(),
-        "ram_available_gb": round(ram.available / (1024**3), 2),
+        "cpu_usage_pct": round(psutil.cpu_percent(), 1) if expose_host else None,
+        "ram_available_gb": round(ram.available / (1024**3), 2) if ram is not None else None,
         "gateways": ["openai", "anthropic", "ollama"],
         "loaded_models": loaded_ids,
         "live_engine_loaded": len(ACTIVE_MODELS) > 0,
@@ -181,16 +182,17 @@ def get_health():
 @app.post("/v1/models/load")
 def api_load_model(req: ModelLoadRequest, _: bool = Depends(verify_token)):
     try:
+        target_id = req.model_id or "loaded-local-gguf"
         eng = load_native_model(
             model_path=req.model_path,
-            model_id=req.model_id or "NousResearch/Hermes-4.3-36B",
+            model_id=target_id,
             max_context_length=req.max_context_length,
             preload_weights=bool(req.preload_weights),
         )
         return {
             "status": "loaded",
             "simulated": False,
-            "model_id": req.model_id,
+            "model_id": target_id,
             "architecture": eng.config.architecture,
             "layers": eng.config.block_count,
             "vocab_size": eng.config.vocab_size,
@@ -218,20 +220,25 @@ def get_dashboard():
 
 @app.get("/v1/telemetry/hud")
 def get_telemetry_hud():
-    ram = psutil.virtual_memory()
+    expose_host = os.environ.get("QERLIO_EXPOSE_HOST_METRICS") == "1"
+    ram = psutil.virtual_memory() if expose_host else None
     return {
         "measurement_status": "no_live_measurement",
         "throughput_tps": None,
         "ttft_ms": None,
         "model_memory_gb": None,
-        "ram_total_gb": round(ram.total / (1024**3), 2),
-        "ram_available_gb": round(ram.available / (1024**3), 2),
+        "ram_total_gb": round(ram.total / (1024**3), 2) if ram is not None else None,
+        "ram_available_gb": round(ram.available / (1024**3), 2) if ram is not None else None,
         "thermal_state": None,
         "quant_schemes_count": len(QUANT_CATALOG),
         "supported_architectures_count": ARCH_CATALOG.total_count,
         "tested_architectures_count": ARCH_CATALOG.tested_count,
         "experimental_architectures_count": ARCH_CATALOG.experimental_count,
         "architectures_families": ARCH_CATALOG.list_families(),
+        "theoretical_estimates_note": (
+            "adaptive_hybrid_7b and sink_aware_16k are theoretical formula estimates, "
+            "not live runtime measurements"
+        ),
         "adaptive_hybrid_7b": compute_layer_adaptive_mixed_precision(7.0),
         "sink_aware_16k": calculate_sink_aware_kv_cache(context_tokens=16384)
     }
@@ -239,17 +246,25 @@ def get_telemetry_hud():
 
 @app.get("/v1/models")
 def list_openai_models(_: bool = Depends(verify_token)):
-    base_models = [
-        {"id": "zaqeris/zaqeris-7b", "object": "model", "created": int(time.time()), "owned_by": "zaqeris-ai"},
-        {"id": "zaqeris/zqn-12b", "object": "model", "created": int(time.time()), "owned_by": "zaqeris-ai"},
-        {"id": "zaqeris/zaqeris-axiom", "object": "model", "created": int(time.time()), "owned_by": "zaqeris-ai"},
-        {"id": "NousResearch/Hermes-4.3-36B", "object": "model", "created": int(time.time()), "owned_by": "nousresearch"},
-        {"id": "qerlio-adaptive-balanced", "object": "model", "created": int(time.time()), "owned_by": "zaqeris-ai"},
-        {"id": "qerlio-reference-cpu", "object": "model", "created": int(time.time()), "owned_by": "zaqeris-ai"}
+    loaded_ids = [k for k in ACTIVE_MODELS.keys() if k != "default"]
+    now = int(time.time())
+    data = [
+        {
+            "id": mid,
+            "object": "model",
+            "created": now,
+            "owned_by": "loaded-local-gguf",
+            "status": "loaded",
+            "loaded": True,
+            "simulated": False,
+            "architecture": ACTIVE_MODELS[mid].config.architecture,
+        }
+        for mid in loaded_ids
     ]
     return {
         "object": "list",
-        "data": base_models
+        "loaded_count": len(data),
+        "data": data
     }
 
 
@@ -605,33 +620,27 @@ def anthropic_messages(req: AnthropicRequest, _: bool = Depends(verify_token)):
 
 @app.get("/api/tags")
 def ollama_tags():
+    loaded_ids = [k for k in ACTIVE_MODELS.keys() if k != "default"]
+    now_iso = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    models = [
+        {
+            "name": mid,
+            "model": mid,
+            "modified_at": now_iso,
+            "size": None,
+            "digest": None,
+            "status": "loaded",
+            "loaded": True,
+            "details": {
+                "format": "gguf",
+                "family": ACTIVE_MODELS[mid].config.architecture,
+            },
+        }
+        for mid in loaded_ids
+    ]
     return {
-        "models": [
-            {
-                "name": "zaqeris-7b:latest",
-                "model": "zaqeris-7b:latest",
-                "modified_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                "size": None,
-                "digest": None,
-                "details": {"format": "gguf", "family": "zaqeris_7b", "parameter_size": "7B", "quantization_level": "Q4_K_M"}
-            },
-            {
-                "name": "zqn-12b:latest",
-                "model": "zqn-12b:latest",
-                "modified_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                "size": None,
-                "digest": None,
-                "details": {"format": "gguf", "family": "zqn_12b", "parameter_size": "12B", "quantization_level": "M3_GPTQ"}
-            },
-            {
-                "name": "qerlio:latest",
-                "model": "qerlio:latest",
-                "modified_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                "size": None,
-                "digest": None,
-                "details": {"format": "gguf", "family": "llama", "parameter_size": "1B", "quantization_level": "Q4_K_M"}
-            }
-        ]
+        "models": models,
+        "loaded_count": len(models),
     }
 
 

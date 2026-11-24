@@ -68,5 +68,5 @@
 ## 4. Supply Chain & Dependency Security
 
 - **No Dynamic Remote Code:** `trust_remote_code=True` behavior from some Python libraries is categorically forbidden in QERLIO.
-- **Dependency Policy:** All third-party C++ dependencies (such as header-only `nlohmann/json`) are pinned to verified releases in `third_party/DEPENDENCY_INVENTORY.md`; the inference engine in `core/inference/` is implemented from scratch without `llama.cpp`, `ggml`, or external ML frameworks.
-- **SBOM Generation:** Every release pipeline produces an automated Software Bill of Materials in CycloneDX JSON format.
+- **Dependency Policy:** All runtime, optional-gateway, and offline-reference dependencies are documented accurately in `third_party/DEPENDENCY_INVENTORY.md` and `pyproject.toml`; no external C/C++ third-party headers are vendored in the tree, and the inference engine in `core/inference/` is implemented from scratch without `llama.cpp`, `ggml`, or external ML frameworks.
+- **SBOM Status:** Dependency tracking is maintained manually in `third_party/DEPENDENCY_INVENTORY.md` and `pyproject.toml`; automated CycloneDX SBOM generation is not currently active in CI.

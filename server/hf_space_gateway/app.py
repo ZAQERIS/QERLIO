@@ -16,26 +16,6 @@ except ImportError:
     GRADIO_AVAILABLE = False
     gr = None
 
-SUPPORTED_MODELS = [
-    {
-        "id": "NousResearch/Hermes-4.3-36B",
-        "name": "Hermes 4.3 - Seed 36B",
-        "family": "Reasoning & Dialectic",
-        "base_model": "ByteDance Seed-OSS-36B-Base",
-        "architecture_class": "SeedOssForCausalLM",
-        "context_window": 524288,
-        "features": ["hybrid_thinking", "structured_tool_calls"]
-    },
-    {
-        "id": "ZAQERIS/ZAQERIS-7B",
-        "name": "ZAQERIS-7B Native",
-        "family": "ZAQERIS Native",
-        "base_model": "ZAQERIS Native Pretrained",
-        "context_window": 32768,
-        "features": ["tool_calls"]
-    }
-]
-
 app = FastAPI(
     title="QERLIO Remote API Gateway",
     description="OpenAI-compatible HTTP gateway template (no model backend attached by default)",
@@ -57,7 +37,7 @@ class ChatMessage(BaseModel):
 
 
 class ChatCompletionRequest(BaseModel):
-    model: str = "NousResearch/Hermes-4.3-36B"
+    model: str = "unloaded-gateway-stub"
     messages: List[ChatMessage]
     temperature: Optional[float] = 0.6
     top_p: Optional[float] = 0.95
@@ -147,7 +127,7 @@ def healthz():
         "simulated": True,
         "auth_required": bool(os.environ.get("QERLIO_GATEWAY_SECRET") or os.environ.get("GATEWAY_SECRET_KEY")),
         "trial_remaining_hours": round(remaining_seconds / 3600.0, 2),
-        "models": [m["id"] for m in SUPPORTED_MODELS]
+        "loaded_models": []
     }
 
 
@@ -155,15 +135,9 @@ def healthz():
 def list_models(_: bool = Depends(verify_secret_token)):
     return {
         "object": "list",
-        "data": [
-            {
-                "id": m["id"],
-                "object": "model",
-                "created": int(time.time()),
-                "owned_by": "nousresearch" if "Hermes" in m["id"] else "zaqeris-ai"
-            }
-            for m in SUPPORTED_MODELS
-        ]
+        "backend_loaded": False,
+        "loaded_count": 0,
+        "data": []
     }
 
 
@@ -218,7 +192,7 @@ if GRADIO_AVAILABLE and gr is not None:
         fn=lambda prompt, model: "[Gateway stub: no live inference backend attached]",
         inputs=[
             gr.Textbox(label="Prompt"),
-            gr.Dropdown(choices=[m["id"] for m in SUPPORTED_MODELS], value="NousResearch/Hermes-4.3-36B")
+            gr.Dropdown(choices=["unloaded-gateway-stub"], value="unloaded-gateway-stub")
         ],
         outputs="text",
         title="QERLIO Remote API Gateway (Template Stub)",

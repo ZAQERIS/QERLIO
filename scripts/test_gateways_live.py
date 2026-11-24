@@ -21,14 +21,14 @@ def run_live_verification():
     # 2. OpenAI Gateway
     print("\n[2] Testing OpenAI /v1/chat/completions (Non-Streaming) ...")
     r_openai = client.post("/v1/chat/completions", json={
-        "model": "qerlio-adaptive-balanced",
+        "model": "qerlio-unloaded-stub",
         "messages": [{"role": "user", "content": "What is QERLIO Runtime?"}]
     })
     print("OpenAI Output:", r_openai.json()["choices"][0]["message"]["content"])
 
     print("\n[3] Testing OpenAI /v1/chat/completions (Streaming SSE) ...")
     r_openai_stream = client.post("/v1/chat/completions", json={
-        "model": "qerlio-adaptive-balanced",
+        "model": "qerlio-unloaded-stub",
         "messages": [{"role": "user", "content": "Stream response"}],
         "stream": True
     })
@@ -37,7 +37,7 @@ def run_live_verification():
     # 3. Anthropic Claude Gateway
     print("\n[4] Testing Anthropic /v1/messages ...")
     r_anthropic = client.post("/v1/messages", json={
-        "model": "qerlio-adaptive-balanced",
+        "model": "qerlio-unloaded-stub",
         "messages": [{"role": "user", "content": "Explain adaptive scheduling."}]
     })
     print("Anthropic Output:", r_anthropic.json()["content"][0]["text"])
@@ -45,11 +45,12 @@ def run_live_verification():
     # 4. Ollama Gateway
     print("\n[5] Testing Ollama /api/tags ...")
     r_ollama_tags = client.get("/api/tags")
-    print("Ollama Models:", r_ollama_tags.json()["models"][0]["name"])
+    loaded_names = [m["name"] for m in r_ollama_tags.json()["models"]]
+    print("Ollama Loaded Models:", loaded_names)
 
     print("\n[6] Testing Ollama /api/generate ...")
     r_ollama_gen = client.post("/api/generate", json={
-        "model": "qerlio:latest",
+        "model": "qerlio-unloaded-stub",
         "prompt": "Hello Ollama",
         "stream": False
     })

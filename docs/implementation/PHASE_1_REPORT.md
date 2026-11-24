@@ -1,14 +1,14 @@
 > **Historical Archive Note (v0.3.1):** Phase 1 baseline snapshot (`2026-11-19`) documenting initial scaffolding prior to the v0.3.0 native engine and v0.3.1 registry corrections. See [`README.md`](../../README.md) for current v0.3.1 state.
 
-# QERLIO Runtime — Phase 1 Implementation & Conformance Report
+# [HISTORICAL ARCHIVE — 2026-11-19] QERLIO Runtime — Phase 1 Implementation & Conformance Report
 
-**Date:** 2026-11-19  
-**Status:** COMPLETE (Milestone 1 Core & SDK Conformance Accepted)  
+**Historical Date:** 2026-11-19  
+**Historical Milestone Status:** Phase 1 Scaffolding Snapshot (`15` early unit tests; superseded by `v0.3.0` / `v0.3.1`)  
 **Author:** QERLIO Systems Architect / ZAQERIS AI Engineering  
 
 ---
 
-## 1. Scope Attempted & Delivered
+## 1. Historical Scope Snapshot (2026-11-19)
 - Complete definition and implementation of the Hardware Abstraction Layer (`backends/backend_api/backend.hpp`).
 - Implementation of the Context Budgeter and KV Cache Memory Planner (`core/memory/memory_planner.hpp`, `core/memory/memory_planner.cpp`).
 - Implementation of the Adaptive Device Scheduler with thermal throttling and power profiles (`core/scheduler/adaptive_scheduler.hpp`, `core/scheduler/adaptive_scheduler.cpp`).

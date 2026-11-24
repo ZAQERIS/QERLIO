@@ -1,16 +1,16 @@
 > **Historical Archive Note (v0.3.1):** This initial specification draft (`2026-11-18`) pre-dates the v0.3.0 native engine rewrite. References to linking `llama.cpp` as the primary backend are superseded: as of v0.3.0+, QERLIO's runtime inference engine under `core/inference/` is implemented from scratch without `llama.cpp`, and current support counts (`1 tested, 183 experimental`) are authoritative in [`README.md`](../README.md) and [`registry/model_architectures.json`](../registry/model_architectures.json).
 
 # QERLIO Runtime
-## المواصفات البحثية والهندسية والتنفيذية لمحرك ذكاء اصطناعي محلي متعدد الأجهزة
+## [مسودة تأسيسية مؤرشفة — 18 نوفمبر 2026] المواصفات البحثية والهندسية الأولية
 
 **الجهة المالكة للمشروع:** ZAQERIS AI — Research Group  
 **الاسم المقترح للمحرك:** QERLIO Runtime (كيرليو)  
 **الهوية المقترحة:** `QERLIO by ZAQERIS AI`  
-**نوع الوثيقة:** Product Requirements Document + System Architecture + Technical Design + Engineering Execution Blueprint  
-**الإصدار:** 1.0 — Draft for Research and Engineering Review  
+**نوع الوثيقة:** Product Requirements Document + System Architecture + Technical Design + Historical Draft (`2026-11-18`, superseded by `v0.3.0` / `v0.3.1` where noted)  
+**الإصدار:** 1.0 — Historical Archive Draft (`2026-11-18`)  
 **التاريخ:** 18 نوفمبر 2026  
 **حالة الاسم:** اسم مرشّح مؤقت، غير معتمد قانونياً  
-**حالة المواصفات:** أساس مشروع قابل للتنفيذ، وليس ادعاءً بأن جميع المزايا نُفذت أو ثبت أداؤها
+**حالة المواصفات:** مسودة تأسيسية أولية مؤرشفة؛ المرجع الحالي للحالة الفعلية للمشروع هو [`README.md`](../README.md) وسجل البُنى [`registry/model_architectures.json`](../registry/model_architectures.json) (`1 tested, 183 experimental`).
 
 ---
 
@@ -20,17 +20,16 @@
 
 ---
 
-# 1. الملخص التنفيذي
+# 1. الملخص التنفيذي الأولي (مسودة 2026-11-18 المؤرشفة)
 
-QERLIO Runtime هو محرك ومنظومة تشغيل محلية (Local AI Runtime Platform) هدفها تحميل نماذج الذكاء الاصطناعي وتشغيلها وإدارتها بأعلى كفاءة عملية ممكنة على أجهزة المستخدم، مع إعطاء الأولوية للهواتف والأجهزة الطرفية ثم التوسع إلى الحواسيب ومحطات العمل.
+QERLIO Runtime هو محرك ومنظومة تشغيل محلية (Local AI Runtime Platform) هدفها تحميل نماذج الذكاء الاصطناعي وتشغيلها وإدارتها محلياً على أجهزة المستخدم.
 
-يتكون المنتج من:
-- **Inference Runtime:** طبقة تنفيذ وتشغيل النماذج.
-- **Backend System:** محولات لمحركات وواجهات تسريع مختلفة.
-- **Model System:** فهرسة النماذج وتحميلها والتحقق من ملفاتها وإدارة نسخها.
-- **Adaptive Scheduler:** جدولة تتكيف مع الذاكرة والحرارة والطاقة والعتاد.
-- **SDK/API:** واجهات ثابتة للمطورين والتطبيقات.
-- **Local AI Services:** خدمات اختيارية للذاكرة وRAG والأدوات والوكلاء.
-- **Benchmark Lab:** منظومة قياس قابلة لإعادة الإنتاج لمقارنة الأداء والجودة والطاقة.
+تتكون المنظومة في التصميم المرجعي من:
+- **Inference Runtime:** طبقة تنفيذ وتشغيل النماذج (نُفذت فعلياً من الصفر في `v0.3.0+` تحت `core/inference/`).
+- **Backend System:** واجهة تجريد لمحركات ومسارات تنفيذ مستقبلية (لم يُربط `llama.cpp` أبداً).
+- **Model System:** فهرسة النماذج وتحميلها والتحقق من ملفاتها (`SHA-256` وحدود GGUF).
+- **Adaptive Scheduler:** جدولة وموازنة الذاكرة والجلسات.
+- **SDK/API:** واجهات C ABI وPython SDK وبوابة HTTP محلية.
+- **Local AI Services:** خدمات أدوات الوكلاء الآمنة في بيئة معزولة.
 
-القرار الاستراتيجي الأساسي: عدم البدء بإعادة اختراع العجلة أو كتابة kernels الاستدلال من الصفر. الاعتماد على محرك ناضج مثل `llama.cpp` كأول Backend لملفات GGUF، وبناء طبقات QERLIO الأصلية حوله: إدارة النماذج، اكتشاف العتاد، الجدولة التكيفية، واجهات SDK/C ABI، واختبارات الأمان ومراقبة الموارد.
+**ملاحظة تاريخية حول قرار التنفيذ (مُنسوخ ومُحدَّث في `v0.3.0`):** اقترحت مسودة `2026-11-18` الأولية عدم كتابة kernels من الصفر والنظر في استخدام `llama.cpp` كـ Backend مبدئي لملفات GGUF؛ **إلا أن هذا المقترح لم يُنفذ وأُلغي رسمياً في `v0.3.0`** عندما بُني محرك GGUF v2/v3 الأصلي لـ QERLIO من الصفر داخل `core/inference/` (Python + NumPy + مكتبة C11 SIMD GEMM في `native_gemm.c`) بدون أي اعتماد تشغيلي على `llama.cpp` أو `ggml`.

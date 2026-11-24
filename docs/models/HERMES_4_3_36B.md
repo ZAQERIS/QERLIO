@@ -100,7 +100,7 @@ QERLIO_RUN_REAL_HERMES=1 python -m pytest tests/test_real_hermes_36b_optin.py -v
 | `T-A` Official weights | PASS | [`NousResearch/Hermes-4.3-36B-GGUF`](https://huggingface.co/NousResearch/Hermes-4.3-36B-GGUF) / `hermes-4_3_36b-Q4_K_M.gguf` |
 | `T-B` End-to-end execution | PASS | `SeedOssEngine` loads `models/hermes-4_3_36b-Q4_K_M.gguf`, tokenizes, runs all 64 layers (`hidden=5120`, `ffn=27648`, `heads=80`, `kv_heads=8`), and generates tokens |
 | `T-C` >= 64 greedy tokens | PASS | 5 fixed prompts × 64 greedy tokens (`320` generated tokens total) |
-| `T-D` Recorded prompt & output | PASS | Committed in [`tests/fixtures/hermes_4_3_36b_qerlio_verification_record.json`](tests/fixtures/hermes_4_3_36b_qerlio_verification_record.json) and reproduced below |
+| `T-D` Recorded prompt & output | PASS | Committed in [`tests/fixtures/hermes_4_3_36b_qerlio_verification_record.json`](../../tests/fixtures/hermes_4_3_36b_qerlio_verification_record.json) and reproduced below |
 | `T-E` Reproducible command | PASS | `python scripts/verify_hermes_36b_real.py --model-path models/hermes-4_3_36b-Q4_K_M.gguf --reference-fixture tests/fixtures/hermes_4_3_36b_transformers_reference.json` |
 | `T-F` Verified SHA-256 & bytes | PASS | Size `21,762,145,216` bytes; SHA-256 `17823599694fa3503ef54bf748d5078c6ce881f4d01616cafa255dc05d215a08` |
 
@@ -112,11 +112,11 @@ Command: `python scripts/verify_hermes_36b_real.py --model-path models/hermes-4_
 
 | Test | Result | Recorded Value / Evidence |
 | :--- | :--- | :--- |
-| T1 GGUF loader | PASS | 27 KVs, 771 tensors match [`tests/fixtures/hermes_4_3_36b_q4_k_m_metadata.json`](tests/fixtures/hermes_4_3_36b_q4_k_m_metadata.json) |
-| T2 Dequantization | PASS | 21 cases vs `gguf-py 0.19.0`, `max_abs_err=0.00e+00` ([`tests/fixtures/t2_gguf_py_dequant_reference.json`](tests/fixtures/t2_gguf_py_dequant_reference.json)) |
-| T3 Tokenizer | PASS | 64/64 cases, exact round-trip ([`tests/fixtures/hermes_tokenizer_reference.json`](tests/fixtures/hermes_tokenizer_reference.json)) |
+| T1 GGUF loader | PASS | 27 KVs, 771 tensors match [`tests/fixtures/hermes_4_3_36b_q4_k_m_metadata.json`](../../tests/fixtures/hermes_4_3_36b_q4_k_m_metadata.json) |
+| T2 Dequantization | PASS | 21 cases vs `gguf-py 0.19.0`, `max_abs_err=0.00e+00` ([`tests/fixtures/t2_gguf_py_dequant_reference.json`](../../tests/fixtures/t2_gguf_py_dequant_reference.json)) |
+| T3 Tokenizer | PASS | 64/64 cases, exact round-trip ([`tests/fixtures/hermes_tokenizer_reference.json`](../../tests/fixtures/hermes_tokenizer_reference.json)) |
 | T4 Logits | PASS | top-1 5/5, top-5 overlap 5/5, max top-20 diff `2.10e-05` vs `transformers 5.20.1`; batched prefill `47.87s` |
-| T5 Greedy 64 tokens | PASS | `320/320` tokens identical ([`tests/fixtures/hermes_4_3_36b_transformers_reference.json`](tests/fixtures/hermes_4_3_36b_transformers_reference.json)); batched generation `2362.87s` |
+| T5 Greedy 64 tokens | PASS | `320/320` tokens identical ([`tests/fixtures/hermes_4_3_36b_transformers_reference.json`](../../tests/fixtures/hermes_4_3_36b_transformers_reference.json)); batched generation `2362.87s` |
 | T6 KV cache | PASS | `max_abs_diff=7.58e-05`, top-1 `1371` cached vs recompute (`40.27s` recompute) |
 | T7 Chat & thinking | PASS | Turn 1 `'The capital of France is Paris.'`; Turn 2 `'The Seine River flows through Paris.'`; `thinking=True` closed `</think>` with answer `**4**` (`10682.64s`, completed in two segments from a saved 160-token greedy prefix); `keep_cots` False/True checked |
 | T8 Tool call | PASS | `<tool_call>\n{"name": "get_weather", "arguments": {"location": "Paris", "unit": "celsius"}}\n</tool_call>` -> OpenAI `tool_calls` and Anthropic `tool_use` |
@@ -135,7 +135,7 @@ Command: `python scripts/verify_hermes_36b_real.py --model-path models/hermes-4_
 5. Prompt `'In Python, a dictionary is'` (`[0, 1303, 26657, 139, 387, 33012, 506]`, top-1 `' a'` id=`387`, logit=`21.6034`):
    `' a collection of key-value pairs. Each key is unique and maps to a value. Dictionaries are mutable, meaning you can change their contents after creation. They are also unordered, meaning the items have no defined order.\n\n### Creating a Dictionary\nYou can create a dictionary using curly braces `{}` or the'`
 
-Reference generators: [`tests/reference/generate_hermes_36b_transformers_reference.py`](tests/reference/generate_hermes_36b_transformers_reference.py), [`tests/reference/generate_t2_dequant_reference.py`](tests/reference/generate_t2_dequant_reference.py), and [`tests/reference/generate_t3_tokenizer_reference.py`](tests/reference/generate_t3_tokenizer_reference.py).
+Reference generators: [`tests/reference/generate_hermes_36b_transformers_reference.py`](../../tests/reference/generate_hermes_36b_transformers_reference.py), [`tests/reference/generate_t2_dequant_reference.py`](../../tests/reference/generate_t2_dequant_reference.py), and [`tests/reference/generate_t3_tokenizer_reference.py`](../../tests/reference/generate_t3_tokenizer_reference.py).
 
 ---
 

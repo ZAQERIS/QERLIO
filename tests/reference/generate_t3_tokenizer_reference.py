@@ -1,6 +1,6 @@
 """Offline T3 Reference Generator using HuggingFace `tokenizers` (`NousResearch/Hermes-4.3-36B`).
 
-Per ZAQERIS Ai Directive Section 3.1, this script runs offline (or with cached
+Per ZAQERIS AI Directive Section 3.1, this script runs offline (or with cached
 Hub files) ONCE to verify and regenerate `tests/fixtures/hermes_tokenizer_reference.json`
 covering 64 multilingual, code, math, emoji, whitespace, and special-token strings.
 """

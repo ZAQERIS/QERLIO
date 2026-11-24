@@ -1292,10 +1292,20 @@ class TestLocalAPIEndpointsWithSyntheticSeedOssGGUF:
             assert load_data["simulated"] is False
             assert load_data["architecture"] == "seed_oss"
 
-            # 3) Check /health reflects loaded engine (simulated_inference is False)
+            # 3) Check /health, /v1/models, and /api/tags reflect ONLY the loaded engine
             health_res = client.get("/health")
             assert health_res.status_code == 200
             assert health_res.json()["simulated_inference"] is False
+
+            models_res = client.get("/v1/models")
+            assert models_res.status_code == 200
+            models_data = models_res.json()
+            assert models_data["loaded_count"] == 1
+            assert [m["id"] for m in models_data["data"]] == ["NousResearch/Hermes-4.3-36B"]
+
+            tags_res = client.get("/api/tags")
+            assert tags_res.status_code == 200
+            assert [m["name"] for m in tags_res.json()["models"]] == ["NousResearch/Hermes-4.3-36B"]
 
             # 4) Non-streaming /v1/chat/completions with thinking=True
             chat_res = client.post(

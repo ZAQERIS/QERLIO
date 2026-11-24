@@ -43,8 +43,8 @@ class ModelManifest(BaseModel):
 def test_valid_manifest_schema():
     sample_manifest = {
         "schema_version": "1.0",
-        "model_id": "zaqeris/axiom-mini-q4km",
-        "display_name": "AXIOM Mini Q4_K_M",
+        "model_id": "ZAQERIS/ZAQERIS_AXIOM",
+        "display_name": "ZAQERIS AXIOM M3",
         "publisher": "ZAQERIS AI",
         "revision": "c0ffee1234567890",
         "format": "gguf",
@@ -67,20 +67,20 @@ def test_valid_manifest_schema():
         },
         "tested_backends": [
             {
-                "backend": "qerlio-gguf-llama-cpp",
-                "backend_version": "0.1.0",
-                "status": "tested"
+                "backend": "qerlio-native-cpu",
+                "backend_version": "0.3.1",
+                "status": "experimental"
             }
         ]
     }
     manifest = ModelManifest.model_validate(sample_manifest)
-    assert manifest.model_id == "zaqeris/axiom-mini-q4km"
+    assert manifest.model_id == "ZAQERIS/ZAQERIS_AXIOM"
     assert manifest.files[0].size_bytes == 1048576
 
 def test_invalid_hash_length_rejected():
     invalid_manifest = {
         "schema_version": "1.0",
-        "model_id": "zaqeris/invalid",
+        "model_id": "ZAQERIS/invalid",
         "display_name": "Invalid",
         "publisher": "ZAQERIS AI",
         "revision": "1",

@@ -23,6 +23,36 @@ QERLIO Runtime is a local-first AI execution platform and tooling suite providin
 * **Official Apache-2.0 `LICENSE` File (F2):** Added the full Apache License, Version 2.0 text at [`LICENSE`](LICENSE).
 * **Honest Test Labeling & Opt-In Real-Weight Pytest (F4):** Relabeled [`tests/test_t4_to_t10_engine.py`](tests/test_t4_to_t10_engine.py) and [`tests/test_qwen35_engine.py`](tests/test_qwen35_engine.py) explicitly as synthetic/toy-GGUF unit and plumbing tests (with no silent fallback to toy weights), and added opt-in [`tests/test_real_hermes_36b_optin.py`](tests/test_real_hermes_36b_optin.py) gated on `QERLIO_RUN_REAL_HERMES=1` and the official `models/hermes-4_3_36b-Q4_K_M.gguf` checkpoint (`skip` when absent in default CI).
 * **ASan/UBSan Coverage & Static Doc Audit (F3 & F5):** Expanded [`tests/cpp_safety_test.cpp`](tests/cpp_safety_test.cpp) to exercise single-row and multi-row paths of every kernel in [`core/inference/native_gemm.c`](core/inference/native_gemm.c) under GitHub Actions `C++20 AddressSanitizer & UndefinedBehaviorSanitizer` (`detect_leaks=1:halt_on_error=1`), and updated or marked stale historical docs.
+* **Full Repository Cleanup (C1–C14):** Fixed broken relative test links in [`docs/models/HERMES_4_3_36B.md`](docs/models/HERMES_4_3_36B.md) with [`scripts/check_markdown_links.py`](scripts/check_markdown_links.py); updated `/v1/models` and `/api/tags` in [`server/local_api/server.py`](server/local_api/server.py) and [`server/hf_space_gateway/app.py`](server/hf_space_gateway/app.py) to return empty lists when unloaded and list only actively loaded models; labeled formula estimates in [`core/compression/quant_matrix.py`](core/compression/quant_matrix.py) and `/v1/telemetry/hud` explicitly as theoretical (`measured=false`) with host memory omitted by default; aligned [`third_party/DEPENDENCY_INVENTORY.md`](third_party/DEPENDENCY_INVENTORY.md) and security/risk docs with the repository tree; added [`pyproject.toml`](pyproject.toml), [`requirements.txt`](requirements.txt), [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md), and PR/issue templates; updated [`CONTRIBUTING.md`](CONTRIBUTING.md); converted [`.gitignore`](.gitignore) to 100% ASCII; standardized `ZAQERIS AI` / `ZAQERIS/ZAQERIS-7B` naming (`trained from scratch; only the tokenizer is reused from Qwen2`); documented `v0.2.2` tag-only history; and reinforced archive markings throughout Phase 0/1 documents.
+
+---
+
+## Installation & Build
+
+* **Supported Python:** Python `3.10+`.
+* **Core Inference Engine Dependencies (`core/inference/`):** Python standard library + `numpy>=1.24` (optional C11 `native_gemm` library accelerates `seed_oss` CPU GEMM when built/loaded; NumPy fallback is built in).
+
+1. **Install QERLIO (core runtime only, or with gateway + test dependencies):**
+   ```bash
+   # Core runtime (numpy only)
+   pip install -e .
+
+   # Core runtime + local HTTP gateway/CLI + pytest suite (mirrors requirements.txt)
+   pip install -e ".[dev]"
+   ```
+   See [`third_party/DEPENDENCY_INVENTORY.md`](third_party/DEPENDENCY_INVENTORY.md) and [`pyproject.toml`](pyproject.toml).
+
+2. **Build Optional C11 `native_gemm` Shared Library & C++20 Core (CMake):**
+   ```bash
+   cmake -B build -DCMAKE_BUILD_TYPE=Release
+   cmake --build build --config Release
+   ctest --test-dir build -C Release --output-on-failure
+   ```
+
+3. **Run the Test Suite:**
+   ```bash
+   python -m pytest tests/ -v
+   ```
 
 ---
 
@@ -59,7 +89,7 @@ QERLIO Runtime is a local-first AI execution platform and tooling suite providin
 ## Historical Release Notes (Archive — Superseded Where Noted)
 
 * **v0.3.0 (2026-11-22):** Initial merge introducing the native GGUF v2/v3 engine (`core/inference/`), C11 SIMD GEMM, `Hermes-4.3-36B` verification, and `qwen35`. *(Audit correction noted in v0.3.1: v0.3.0 listed `5 tested / 179 experimental`, counted unofficial `qwen35` and parser-only ZAQERIS entries as `tested`, mislabeled synthetic toy tests as real-model tests, and lacked a root `LICENSE` file; corrected in v0.3.1.)*
-* **v0.2.2 (2026-11-20):** Added `Hermes36BAdapter`, tag parsing, GGUF header KV inspection, `qerlio hermes download`, and stub-honesty fixes. *(Historical archive note: the v0.2.2 release listed `183` entries (`3 tested / 180 experimental`) and noted that QERLIO "does not yet execute `SeedOssForCausalLM` tensor weights locally"; that limitation was superseded by `core/inference/seed_oss_model.py` in v0.3.0+.)*
+* **v0.2.2 (2026-11-20, git tag only — no standalone GitHub Release):** Added `Hermes36BAdapter`, tag parsing, GGUF header KV inspection, `qerlio hermes download`, and stub-honesty fixes. *(Historical archive note: the v0.2.2 release listed `183` entries (`3 tested / 180 experimental`) and noted that QERLIO "does not yet execute `SeedOssForCausalLM` tensor weights locally"; that limitation was superseded by `core/inference/seed_oss_model.py` in v0.3.0+.)*
 * **v0.2.1 (2026-11-20):** Registry cleanup (`182` historical entries), AXIOM metadata correction (~3.16 bpp), placeholder telemetry removal, and path cleanup.
 * **v0.2.0 (2026-11-19):** Initial architecture catalog, sandboxed ReAct agent mode, local multi-protocol API gateway stub, and developer HUD.
 
@@ -103,7 +133,7 @@ Any architecture missing any of `T-A`–`T-F` is **`experimental`**.
 | :--- | :--- | :--- |
 | `zaqeris_axiom` | [AXIOM](https://huggingface.co/ZAQERIS/ZAQERIS_AXIOM) | Sparse MoE trained from scratch: 79.43B total / 12.39B active parameters per token (16 experts per layer, top-2 routing); published as ZAQERIS-M3, ~3.16 bits per parameter (`experimental` in registry pending Section 2 real-weight verification). |
 | `zqn_12b` | [ZQN-12B](https://huggingface.co/ZAQERIS/ZQN-12B) | 12B model for reasoning and agentic tool use (`experimental` in registry pending Section 2 real-weight verification). |
-| `zaqeris_7b` | [ZAQERIS-7B](https://huggingface.co/ZAQERIS/ZAQERIS-7B) | 7B model for function calling and tool use, trained from scratch (only the tokenizer is reused; `experimental` in registry pending Section 2 real-weight verification). |
+| `zaqeris_7b` | [ZAQERIS-7B](https://huggingface.co/ZAQERIS/ZAQERIS-7B) | 7B model for function calling and tool use, trained from scratch (only the tokenizer is reused from Qwen2; `experimental` in registry pending Section 2 real-weight verification). |
 
 Inspect architectures via CLI:
 ```bash

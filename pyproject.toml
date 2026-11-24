@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qerlio"
+version = "0.3.1"
+description = "Local-first AI runtime and from-scratch GGUF v2/v3 CPU inference engine (Python stdlib, NumPy, C11 SIMD)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [
+    { name = "ZAQERIS AI" },
+]
+dependencies = [
+    "numpy>=1.24",
+]
+
+[project.optional-dependencies]
+server = [
+    "fastapi>=0.100",
+    "pydantic>=2.0",
+    "uvicorn>=0.23",
+    "psutil>=5.9",
+]
+dev = [
+    "fastapi>=0.100",
+    "httpx>=0.24",
+    "psutil>=5.9",
+    "pydantic>=2.0",
+    "pytest>=7.4",
+    "uvicorn>=0.23",
+]
+
+[project.scripts]
+qerlio = "tools.qerlio_cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["core*", "sdk*", "server*", "tools*", "formats*"]

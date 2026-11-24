@@ -2,7 +2,7 @@
 
 Documents the offline HuggingFace `transformers` (`SeedOssForCausalLM`) reference fixture
 committed in `tests/fixtures/seed_oss_reference_logits_and_tokens.json`, generated with
-`torch 2.11.0+cu128` and `transformers 5.20.1` (seed=20260301) over 5 fixed prompts x 64
+`torch 2.11.0` and `transformers 5.20.1` (seed=20260301) over 5 fixed prompts x 64
 greedy tokens. Running this script validates the fixture's schema and checksum against
 the deterministic GGUF builder in `tests/test_t4_to_t10_engine.py`.
 """

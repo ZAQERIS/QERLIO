@@ -43,14 +43,11 @@ def capture_dashboard_screenshot():
         page.goto(file_url)
         page.wait_for_timeout(1000)  # Wait for JS to populate tables
 
-        # Also let's populate some realistic stream in the chat output box for the screenshot
+        # Populate an explicit unloaded preview rather than claiming a live model reply
         page.evaluate("""
             document.getElementById('chat-output').textContent = 
-                'User: Explain QERLIO adaptive on-device execution.\\n\\n' +
-                'Assistant: QERLIO operates locally with zero cloud dependencies. ' +
-                'It deploys an adaptive thermal and memory scheduler that monitors ' +
-                'hardware temperature in real-time and dynamically scales KV-cache ' +
-                'allocation to guarantee zero out-of-memory terminations.';
+                'User: Ping gateway stub.\\n\\n' +
+                'Assistant: [Simulated UI preview: no model is currently loaded into the engine.]';
         """)
 
         page.screenshot(path=output_path, full_page=True)
