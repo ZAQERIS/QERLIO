@@ -22,7 +22,7 @@
 | :--- | :--- | :--- | :--- | :--- |
 | **`seed_36b`** | `NousResearch/Hermes-4.3-36B-GGUF` (`hermes-4_3_36b-Q4_K_M.gguf`) | `core/inference/seed_oss_model.py` | **`TESTED`** | Meets Section 2 `T-A`–`T-F`: SHA-256 `17823599...`, 320/320 greedy tokens vs `transformers 5.20.1` (`tests/fixtures/hermes_4_3_36b_qerlio_verification_record.json`) |
 | **`qwen35`** | `Qwen/Qwen3.8-27B` | `core/inference/qwen35_model.py` | `EXPERIMENTAL` | Synthetic CI tests only + earlier 4-token run on an unofficial UD quant (`< 64` tokens, invalid for `tested`) |
-| **`zaqeris_axiom`**, **`zqn_12b`**, **`zaqeris_7b`** | `ZAQERIS/ZAQERIS_AXIOM`, `ZQN-12B`, `ZAQERIS-7B` | Prompt/tool parser & M3 adapter only | `EXPERIMENTAL` | No end-to-end `>= 64`-token official-weight run recorded |
+| **`zaqeris_axiom`**, **`zqn_12b`**, **`zaqeris_7b`** | `ZAQERIS/ZAQERIS_AXIOM`, `ZAQERIS/ZQN-12B`, `ZAQERIS/ZAQERIS-7B` | Prompt/tool parser & M3 adapter only | `EXPERIMENTAL` | `ZAQERIS-7B` was trained from scratch (only the tokenizer is reused from Qwen2); no end-to-end `>= 64`-token official-weight run recorded |
 | **All other 179 architectures** | Llama, Mistral, Gemma, Phi, MoE, VLM, etc. | Catalog metadata only | `EXPERIMENTAL` | No local weight execution |
 
 ---

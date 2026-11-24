@@ -86,7 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - **Architecture Catalog:** Registry of model architecture metadata covering 10 architectural families.
-- **Built-in Agent Mode:** Sandboxed ReAct loop with native tool calling support for ZAQERIS-7B, ZQN-12B, and OpenAI function calling formats.
+- **Built-in Agent Mode:** Sandboxed ReAct loop with native tool calling support for `ZAQERIS/ZAQERIS-7B` (trained from scratch; only the tokenizer is reused from Qwen2), `ZAQERIS/ZQN-12B`, and OpenAI function calling formats.
 - **Safe Sandbox Tools:** Calculator, Sandboxed Python Evaluator, Workspace File Search, and Synthetic Web Search.
 - **Universal Multi-API Gateway:** Local API server supporting OpenAI, Anthropic, and Ollama protocol compatibility.
 - **Developer HUD:** Web-based architecture explorer and agent studio interface.

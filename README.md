@@ -132,7 +132,7 @@ Any architecture missing any of `T-A`–`T-F` is **`experimental`**.
 | :--- | :--- | :--- |
 | `zaqeris_axiom` | [AXIOM](https://huggingface.co/ZAQERIS/ZAQERIS_AXIOM) | Sparse MoE trained from scratch: 79.43B total / 12.39B active parameters per token (16 experts per layer, top-2 routing); published as ZAQERIS-M3, ~3.16 bits per parameter (`experimental` in registry pending Section 2 real-weight verification). |
 | `zqn_12b` | [ZQN-12B](https://huggingface.co/ZAQERIS/ZQN-12B) | 12B model for reasoning and agentic tool use (`experimental` in registry pending Section 2 real-weight verification). |
-| `zaqeris_7b` | [ZAQERIS-7B](https://huggingface.co/ZAQERIS/ZAQERIS-7B) | 7B model for function calling and tool use, trained from scratch (only the tokenizer is reused; `experimental` in registry pending Section 2 real-weight verification). |
+| `zaqeris_7b` | [ZAQERIS-7B](https://huggingface.co/ZAQERIS/ZAQERIS-7B) | 7B model for function calling and tool use, trained from scratch (only the tokenizer is reused from Qwen2; `experimental` in registry pending Section 2 real-weight verification). |
 
 Inspect architectures via CLI:
 ```bash

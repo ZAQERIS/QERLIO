@@ -1,6 +1,6 @@
 """Offline T4/T5 Reference Generator using official HuggingFace `transformers` + `gguf-py`.
 
-Per ZAQERIS Ai Directive Section 3.1, this script runs strictly offline ONCE
+Per ZAQERIS AI Directive Section 3.1, this script runs strictly offline ONCE
 against `models/hermes-4_3_36b-Q4_K_M.gguf` (never imported or invoked by
 `core/inference/` at runtime). It instantiates HuggingFace `SeedOssDecoderLayer`,
 `SeedOssRMSNorm`, and `SeedOssRotaryEmbedding` one layer at a time using tensors

@@ -62,7 +62,7 @@ def test_api_agents_endpoints():
 
     res_run = client.post("/v1/agents/run", json={
         "prompt": "Calculate 100 / 4",
-        "model": "zaqeris/zqn-12b"
+        "model": "ZAQERIS/ZQN-12B"
     })
     assert res_run.status_code == 200
     data = res_run.json()
@@ -70,7 +70,7 @@ def test_api_agents_endpoints():
 
 def test_openai_tool_calling_integration():
     res = client.post("/v1/chat/completions", json={
-        "model": "zaqeris/zaqeris-7b",
+        "model": "ZAQERIS/ZAQERIS-7B",
         "messages": [{"role": "user", "content": "What is 42 * 2?"}],
         "tools": [
             {
@@ -89,7 +89,7 @@ def test_openai_tool_calling_integration():
 
 def test_anthropic_tool_calling_integration():
     res = client.post("/v1/messages", json={
-        "model": "zaqeris/zaqeris-7b",
+        "model": "ZAQERIS/ZAQERIS-7B",
         "messages": [{"role": "user", "content": "Calculate value"}],
         "tools": [{"name": "calculator", "description": "Calculator"}]
     })

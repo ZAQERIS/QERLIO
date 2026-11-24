@@ -64,7 +64,7 @@
       ],
       "native_tools_supported": true,
       "parameters_range": "7B",
-      "primary_use": "Function calling and tool use; trained from scratch (only the tokenizer is reused)",
+      "primary_use": "Function calling and tool use; trained from scratch (only the tokenizer is reused from Qwen2)",
       "huggingface_repo": "ZAQERIS/ZAQERIS-7B",
       "support_status": "experimental"
     },
