@@ -148,6 +148,35 @@ python tools/qerlio_cli.py server --port 8787
 
 ---
 
+## Python Setup
+
+The Python parts of QERLIO (`core/`, `server/local_api/`, `sdk/python/`, `tools/`) need Python 3.10 or newer. The C/C++ core is built separately with CMake (see `CONTRIBUTING.md`) and is not needed for these steps.
+
+```bash
+git clone https://github.com/ZAQERIS/QERLIO.git
+cd QERLIO
+
+python3 -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt        # runtime dependencies
+python -m pip install -r requirements-dev.txt    # runtime + test dependencies (pytest, httpx)
+```
+
+`pyproject.toml` lists the same dependencies. `pip install ".[test]"` is the equivalent single command; it installs only the dependencies, because the repository modules are used directly from the source checkout. Optional: `pip install ".[download]"` adds `huggingface_hub`, used only by the model download command in `tools/qerlio_cli.py`.
+
+Check that the dependencies installed correctly:
+
+```bash
+python -m pip check
+python -c "import numpy, psutil, pydantic, fastapi, uvicorn; print('dependencies OK')"
+```
+
+Then try the commands shown above in this README, for example `python tools/qerlio_cli.py architectures count`, or run the tests with `python -m pytest tests/ -v` from the repository root.
+
+---
+
 ## Automated Verification Suite
 
 Run the default CI / offline test suite (uses synthetic toy GGUFs and committed offline reference fixtures; skips [`tests/test_real_hermes_36b_optin.py`](tests/test_real_hermes_36b_optin.py) cleanly when `QERLIO_RUN_REAL_HERMES=1` or the 21.76 GB GGUF is absent):

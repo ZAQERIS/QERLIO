@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "qerlio"
+version = "0.0.0"
+description = "QERLIO Runtime: local-first GGUF inference engine, local API gateway and tooling (Python parts)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "numpy>=1.24",
+    "psutil>=5.9",
+    "pydantic>=2.0",
+    "fastapi>=0.110",
+    "uvicorn>=0.28",
+]
+
+[project.optional-dependencies]
+# Needed only to run the test suite (fastapi's TestClient requires httpx).
+test = [
+    "pytest>=7.4",
+    "httpx>=0.27",
+]
+# Needed only for `qerlio hermes download` in tools/qerlio_cli.py.
+download = [
+    "huggingface_hub>=0.20",
+]
+
+# This file declares dependencies only. The repository modules (core, server,
+# sdk, tools, formats) are imported directly from a source checkout, so no
+# Python packages are installed from this project.
+[tool.setuptools]
+py-modules = []
