@@ -21,7 +21,7 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest numpy pydantic psutil fastapi httpx uvicorn
+          pip install -e ".[dev]"
 
       - name: Run Full Test Suite
         run: |

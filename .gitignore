@@ -57,9 +57,14 @@ venv/
 *.pth
 *.onnx
 weights/
-models/
+/models/
 models_cache/
 
 # Local dashboard screenshots (may expose host details; never commit)
-صورة hud/
+*hud*/
+*hud*.png
+*hud*.jpg
+*hud*.jpeg
+*hud*.webp
+screenshots/
 assets/*hud*.png

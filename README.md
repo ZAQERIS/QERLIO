@@ -26,6 +26,35 @@ QERLIO Runtime is a local-first AI execution platform and tooling suite providin
 
 ---
 
+## Installation & Build
+
+* **Supported Python:** Python `3.10+`.
+* **Core Inference Engine Dependencies (`core/inference/`):** Python standard library + `numpy>=1.24` (optional C11 `native_gemm` library accelerates `seed_oss` CPU GEMM when built/loaded; NumPy fallback is built in).
+
+1. **Install QERLIO (core runtime only, or with gateway + test dependencies):**
+   ```bash
+   # Core runtime (numpy only)
+   pip install -e .
+
+   # Core runtime + local HTTP gateway/CLI + pytest suite (mirrors requirements.txt)
+   pip install -e ".[dev]"
+   ```
+   See [`third_party/DEPENDENCY_INVENTORY.md`](third_party/DEPENDENCY_INVENTORY.md) and [`pyproject.toml`](pyproject.toml).
+
+2. **Build Optional C11 `native_gemm` Shared Library & C++20 Core (CMake):**
+   ```bash
+   cmake -B build -DCMAKE_BUILD_TYPE=Release
+   cmake --build build --config Release
+   ctest --test-dir build -C Release --output-on-failure
+   ```
+
+3. **Run the Test Suite:**
+   ```bash
+   python -m pytest tests/ -v
+   ```
+
+---
+
 ## Native Engine Capabilities (v0.3.0 Baseline + v0.3.1 Corrections)
 
 * **From-Scratch GGUF v2/v3 Loader & Streaming (`core/inference/gguf_loader.py`):** Binary parser and memory-mapped tensor reader with magic/version/bounds validation and row-level dequantized lookup (`get_tensor_rows_f32`).
