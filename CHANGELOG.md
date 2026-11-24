@@ -47,6 +47,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.2] - 2026-11-20
 
+> *(Release note: `v0.2.2` exists as git tag `v0.2.2` only and was not published as a standalone GitHub Release.)*
+
 ### Added
 - **Hermes 4.3 36B (`Seed-OSS`) Chat Template & Tag Parser (`core/models/hermes_adapter.py`):** Prompt formatter and output tag parser for [`NousResearch/Hermes-4.3-36B`](https://huggingface.co/NousResearch/Hermes-4.3-36B) and [`NousResearch/Hermes-4.3-36B-GGUF`](https://huggingface.co/NousResearch/Hermes-4.3-36B-GGUF) (`ByteDance Seed-OSS-36B-Base` / `SeedOssForCausalLM`, `model_type: seed_oss`, 524,288 context length) using the `Llama-3-Chat` template (`<seed:bos>`, `<|start_header_id|>`, `<|end_header_id|>`, `<|eot_id|>`).
 - **Thinking & Tool-Call Parsing Features:**

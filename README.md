@@ -59,7 +59,7 @@ QERLIO Runtime is a local-first AI execution platform and tooling suite providin
 ## Historical Release Notes (Archive — Superseded Where Noted)
 
 * **v0.3.0 (2026-11-22):** Initial merge introducing the native GGUF v2/v3 engine (`core/inference/`), C11 SIMD GEMM, `Hermes-4.3-36B` verification, and `qwen35`. *(Audit correction noted in v0.3.1: v0.3.0 listed `5 tested / 179 experimental`, counted unofficial `qwen35` and parser-only ZAQERIS entries as `tested`, mislabeled synthetic toy tests as real-model tests, and lacked a root `LICENSE` file; corrected in v0.3.1.)*
-* **v0.2.2 (2026-11-20):** Added `Hermes36BAdapter`, tag parsing, GGUF header KV inspection, `qerlio hermes download`, and stub-honesty fixes. *(Historical archive note: the v0.2.2 release listed `183` entries (`3 tested / 180 experimental`) and noted that QERLIO "does not yet execute `SeedOssForCausalLM` tensor weights locally"; that limitation was superseded by `core/inference/seed_oss_model.py` in v0.3.0+.)*
+* **v0.2.2 (2026-11-20, git tag only — no standalone GitHub Release):** Added `Hermes36BAdapter`, tag parsing, GGUF header KV inspection, `qerlio hermes download`, and stub-honesty fixes. *(Historical archive note: the v0.2.2 release listed `183` entries (`3 tested / 180 experimental`) and noted that QERLIO "does not yet execute `SeedOssForCausalLM` tensor weights locally"; that limitation was superseded by `core/inference/seed_oss_model.py` in v0.3.0+.)*
 * **v0.2.1 (2026-11-20):** Registry cleanup (`182` historical entries), AXIOM metadata correction (~3.16 bpp), placeholder telemetry removal, and path cleanup.
 * **v0.2.0 (2026-11-19):** Initial architecture catalog, sandboxed ReAct agent mode, local multi-protocol API gateway stub, and developer HUD.
 
