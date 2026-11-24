@@ -262,7 +262,15 @@ def test_space_gateway_honest_stub_no_impersonation():
     assert health_data["status"] == "healthy"
     assert health_data["backend_loaded"] is False
     assert health_data["simulated"] is True
+    assert health_data["loaded_models"] == []
     assert "zerogpu_active" not in health_data
+
+    models_res = test_client.get("/v1/models")
+    assert models_res.status_code == 200
+    models_data = models_res.json()
+    assert models_data["backend_loaded"] is False
+    assert models_data["loaded_count"] == 0
+    assert models_data["data"] == []
 
     chat_res = test_client.post("/v1/chat/completions", json={
         "model": "NousResearch/Hermes-4.3-36B",
@@ -292,7 +300,7 @@ def test_space_gateway_honest_stub_no_impersonation():
 
 def test_local_api_does_not_impersonate_hermes_or_zaqeris():
     local_client = TestClient(local_app)
-    for model_id in ("NousResearch/Hermes-4.3-36B", "zaqeris/zaqeris-7b"):
+    for model_id in ("NousResearch/Hermes-4.3-36B", "ZAQERIS/ZAQERIS-7B"):
         res = local_client.post("/v1/chat/completions", json={
             "model": model_id,
             "messages": [{"role": "user", "content": "Test prompt"}]

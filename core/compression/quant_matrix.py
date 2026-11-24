@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 class QuantFamily(str, Enum):
     STANDARD_GGUF = "Standard GGUF"
-    K_QUANTS = "k-quants (SOTA)"
+    K_QUANTS = "k-quants"
     EXTREME_I_QUANTS = "i-quants (Sub-3bit)"
     ZAQERIS_RVQ = "ZAQERIS RVQ (Research)"
     HARDWARE_FP8 = "Hardware FP8 / INT8"
@@ -85,9 +85,9 @@ def compute_layer_adaptive_mixed_precision(
     base_quant: str = "Q4_K_M"
 ) -> Dict[str, Any]:
     """
-    Dynamic Adaptive Hybrid Quantization (DAHQ):
-    Preserves critical input/output embedding and attention layers in Q8/FP16,
-    while aggressively compressing heavy intermediate feed-forward MLP layers in Q3/M3.
+    Theoretical byte-size formula estimate for layer-adaptive mixed precision
+    (8.5 bpw for 15% embedding/attention parameters, 3.91 bpw for 85% MLP parameters).
+    Theoretical estimate only -- not measured on live model weights.
     """
     total_params = param_count_billions * 1e9
     critical_params = total_params * 0.15
@@ -103,6 +103,8 @@ def compute_layer_adaptive_mixed_precision(
     saved_vs_uniform_pct = ((uniform_bytes - hybrid_bytes) / uniform_bytes) * 100.0
 
     return {
+        "theoretical_estimate": True,
+        "measured": False,
         "baseline_fp16_gb": round(baseline_bytes / (1024**3), 2),
         "uniform_quant_gb": round(uniform_bytes / (1024**3), 2),
         "hybrid_quant_gb": round(hybrid_bytes / (1024**3), 2),
@@ -121,8 +123,8 @@ def calculate_sink_aware_kv_cache(
     kv_format: str = "KV_Q4_0"
 ) -> Dict[str, Any]:
     """
-    Sink-Aware KV Cache with Heavy-Hitter Pruning and 4-bit KV Quantization.
-    Enables massive 16k-32k context on constrained devices without memory blowout.
+    Theoretical byte-size formula estimate for a sink-token + heavy-hitter KV cache layout.
+    Theoretical estimate only -- not measured on live model execution.
     """
     bytes_per_elem = 0.5 if kv_format == "KV_Q4_0" else (1.0 if kv_format == "KV_Q8_0" else 2.0)
     
@@ -136,6 +138,8 @@ def calculate_sink_aware_kv_cache(
     saved_pct = ((standard_full_bytes - optimized_bytes) / standard_full_bytes) * 100.0
     
     return {
+        "theoretical_estimate": True,
+        "measured": False,
         "context_tokens": context_tokens,
         "standard_full_mb": round(standard_full_bytes / (1024**2), 1),
         "optimized_mb": round(optimized_bytes / (1024**2), 1),

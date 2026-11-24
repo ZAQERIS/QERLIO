@@ -566,17 +566,17 @@
             abortController = new AbortController();
 
             let url = '/v1/chat/completions';
-            let payload = { model: "qerlio-adaptive-balanced", messages: [{ role: "user", content: prompt }], stream: true };
+            let payload = { model: "qerlio-unloaded-stub", messages: [{ role: "user", content: prompt }], stream: true };
 
             if (currentProtocol === 'anthropic') {
                 url = '/v1/messages';
-                payload = { model: "qerlio-adaptive-balanced", messages: [{ role: "user", content: prompt }], stream: true };
+                payload = { model: "qerlio-unloaded-stub", messages: [{ role: "user", content: prompt }], stream: true };
             } else if (currentProtocol === 'ollama') {
                 url = '/api/generate';
-                payload = { model: "qerlio:latest", prompt: prompt, stream: true };
+                payload = { model: "qerlio-unloaded-stub", prompt: prompt, stream: true };
             } else if (currentProtocol === 'agent') {
                 url = '/v1/agents/run';
-                payload = { prompt: prompt, model: "zaqeris/zqn-12b" };
+                payload = { prompt: prompt, model: "qerlio-unloaded-stub" };
                 try {
                     const response = await fetch(url, {
                         method: 'POST',
