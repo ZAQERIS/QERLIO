@@ -82,7 +82,7 @@ Additional honesty requirements:
 
 Every PR into `main` and every release MUST satisfy all gate items below before merge or tagging. **Do not merge or release until the gate is complete.**
 
-- **G1:** CI green on ALL jobs (`Python Conformance & Integrity Tests`, `C++20 Core Build` on `ubuntu-latest`, `windows-latest`, `macos-latest`, and `C++20 AddressSanitizer & UndefinedBehaviorSanitizer`).
+- **G1:** CI green on ALL jobs (`Python Conformance & Integrity Tests`, `C++20 Core Build` on `ubuntu-latest`, `windows-latest`, `macos-15-intel`, and `C++20 AddressSanitizer & UndefinedBehaviorSanitizer`).
 - **G2:** `python -m pytest tests/ -v` passes with zero failures (only opt-in real-weight tests may skip when the env flag or weight file is absent).
 - **G3:** ASan+UBSan job green with zero findings, covering every `.c` file under `core/inference/`.
 - **G4:** Written approval on the PR from a second reviewer (another team member, NOT the author; self-approval does not count).
