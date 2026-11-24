@@ -15,3 +15,6 @@ When QERLIO operates in developer or desktop server mode, it provides an HTTP/RE
 ## Consequences
 - **Positive:** Protects the user from browser-based drive-by attacks and unauthorized local network access.
 - **Negative:** Local developer scripts must read and pass the local authentication token.
+
+## Implementation Status (v0.3.1)
+`server/local_api/server.py` defaults `start_server(host="127.0.0.1")` and supports optional bearer authentication via `QERLIO_API_KEY`. Automatic ephemeral token generation on startup and strict CORS origin allowlisting remain target hardening items not yet enforced by default.

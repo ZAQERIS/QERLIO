@@ -265,7 +265,7 @@ def main() -> None:
     out_payload = {
         "generator": {
             "command": f"python tests/reference/generate_hermes_36b_transformers_reference.py --qerlio-run <report.json>",
-            "torch_version": torch.__version__,
+            "torch_version": torch.__version__.split("+")[0],
             "transformers_version": importlib.metadata.version("transformers"),
             "gguf_version": importlib.metadata.version("gguf"),
             "numpy_version": np.__version__,
