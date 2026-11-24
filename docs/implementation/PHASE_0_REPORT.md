@@ -1,9 +1,9 @@
 > **Historical Archive Note (v0.3.1):** Phase 0 baseline snapshot (`2026-11-19`). References to host toolchains or linking `llama.cpp` pre-date v0.3.0+; QERLIO's inference runtime (`core/inference/`) is implemented from scratch without `llama.cpp`, and current v0.3.1 status is documented in [`README.md`](../../README.md).
 
-# QERLIO Runtime — Phase 0 Implementation & Audit Report
+# [HISTORICAL ARCHIVE — 2026-11-19] QERLIO Runtime — Phase 0 Implementation & Audit Report
 
-**Date:** 2026-11-19  
-**Status:** COMPLETE (Milestone 0 Accepted)  
+**Historical Date:** 2026-11-19  
+**Historical Milestone Status:** Phase 0 Scaffolding Complete (Superseded by `v0.3.0` / `v0.3.1`)  
 **Author:** QERLIO Systems Architect / ZAQERIS AI Engineering  
 
 ---
@@ -49,7 +49,7 @@ QERLIO/
 │   ├── backend-matrix/SUPPORT_MATRIX.md                   # Hardware & quantization matrix
 │   ├── decisions/
 │   │   ├── ADR-001-cpp20-core-and-c-abi.md                # C++20 and C ABI boundary
-│   │   ├── ADR-002-initial-gguf-backend.md                # llama.cpp reference backend
+│   │   ├── ADR-002-initial-gguf-backend.md                # [SUPERSEDED Phase-0 llama.cpp proposal; never implemented]
 │   │   ├── ADR-003-android-backend-strategy.md            # Android NPU/CPU strategy
 │   │   ├── ADR-004-model-manifest-and-verification.md     # Model manifest integrity
 │   │   ├── ADR-005-local-api-security.md                  # REST server security model
@@ -80,11 +80,10 @@ QERLIO/
 ```bash
 python tools/qerlio_cli.py doctor
 ```
-**Output Summary:**
+**Historical Output Summary (`2026-11-19` host snapshot only):**
 - OS: Windows 11 AMD64
 - Host hardware details: omitted from the public report
-- PyTorch: 2.11.0
-- GGUF: Installed
+- Reference tools (`torch` / `gguf`): present in host Python env on `2026-11-19` (never runtime dependencies of `core/inference/`)
 
 ### Command 2: Integrity & Conformance Test Suite
 ```bash
@@ -108,7 +107,7 @@ python -m pytest tests/ -v
 
 ---
 
-## 6. Next Phase Proposal (Phase 1)
-1. Option to install native toolchain (`winget install Kitware.CMake LLVM.LLVM Git.Git`) or configure CI container.
-2. Link pinned `llama.cpp` reference engine behind `backends/gguf_llama_cpp`.
-3. Conduct end-to-end token generation on real GGUF weights.
+## 6. Historical Phase-1 Proposal (2026-11-19 Archive — `llama.cpp` Plan Superseded in `v0.3.0`)
+1. *(2026-11-19 Proposal)* Install native toolchain or configure CI container (subsequently implemented via GitHub Actions CI).
+2. *(Superseded Proposal — Never Implemented)* Linking `llama.cpp` under `backends/gguf_llama_cpp` was rejected in `v0.3.0`; QERLIO instead built its native GGUF inference engine from scratch in `core/inference/`.
+3. Conduct end-to-end token generation on real GGUF weights (completed in `v0.3.0` / verified under Section 2 criteria in `v0.3.1` for `seed_36b`).
