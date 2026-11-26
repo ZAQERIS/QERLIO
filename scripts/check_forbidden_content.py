@@ -104,8 +104,9 @@ def _iter_repo_files(root: Path) -> List[Path]:
 def _has_bad_tokenizer_wording(low_line: str) -> bool:
     if ("zaqeris-" + "7b") not in low_line and ("zaqeris_" + "7b") not in low_line:
         return False
-    allowed = "only the tokenizer is reused from " + "qwen2"
-    if allowed in low_line:
+    normalized = low_line.replace("[", "").replace("]", "")
+    allowed = "derived from " + "qwen/qwen2.5-coder-7b-instruct"
+    if allowed in normalized:
         return False
     stripped = (
         low_line.replace("qwen35", "")
@@ -183,8 +184,8 @@ def run_scan(
     if not all(b < 128 for b in gi_bytes):
         violations.append(".gitignore contains non-ASCII bytes")
 
-    # 6. Check C9 required tokenizer wording on public surfaces
-    required_phrase = "only the tokenizer is reused from " + "Qwen2"
+    # 6. Check C9 required ZAQERIS-7B provenance on public surfaces
+    required_phrase = "Qwen/Qwen2.5-Coder-7B-Instruct"
     for rel in (
         "README.md",
         "registry/model_architectures.json",
