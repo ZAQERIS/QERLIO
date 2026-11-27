@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="496" viewBox="0 0 920 496" role="img" xml:space="preserve">
+  <title>QERLIO terminal session</title>
+  <desc>Install QERLIO, start the local server on port 8787, and POST one request to /v1/chat/completions.</desc>
+  <rect width="920" height="496" rx="12" fill="#0d1117"/>
+  <rect width="920" height="42" rx="12" fill="#161b22"/>
+  <rect y="20" width="920" height="22" fill="#161b22"/>
+  <line x1="0" y1="42" x2="920" y2="42" stroke="#30363d" stroke-width="1"/>
+  <circle cx="22" cy="21" r="6" fill="#ff5f57"/>
+  <circle cx="42" cy="21" r="6" fill="#febc2e"/>
+  <circle cx="62" cy="21" r="6" fill="#28c840"/>
+  <text x="460" y="26" text-anchor="middle" fill="#8b949e" font-family="monospace" font-size="13">qerlio</text>
+  <rect x="0.5" y="0.5" width="919" height="495" rx="12" fill="none" stroke="#30363d"/>
+  <text x="28" y="74" font-family="monospace" font-size="14"><tspan fill="#3fb950">$</tspan><tspan fill="#e6edf3"> pip install -e </tspan><tspan fill="#a5d6ff">".[dev]"</tspan></text>
+  <text x="28" y="96" fill="#8b949e" font-family="monospace" font-size="14">Successfully installed qerlio-0.3.1</text>
+  <text x="28" y="130" font-family="monospace" font-size="14"><tspan fill="#3fb950">$</tspan><tspan fill="#e6edf3"> qerlio server </tspan><tspan fill="#d2a8ff">--host</tspan><tspan fill="#e6edf3"> 127.0.0.1 </tspan><tspan fill="#d2a8ff">--port</tspan><tspan fill="#e6edf3"> 8787 &amp;</tspan></text>
+  <text x="28" y="152" font-family="monospace" font-size="14"><tspan fill="#79c0ff">INFO:</tspan><tspan fill="#8b949e">     Uvicorn running on http://127.0.0.1:8787 (Press CTRL+C to quit)</tspan></text>
+  <text x="28" y="186" font-family="monospace" font-size="14"><tspan fill="#3fb950">$</tspan><tspan fill="#e6edf3"> curl -s http://127.0.0.1:8787/v1/chat/completions \</tspan></text>
+  <text x="61.6" y="208" font-family="monospace" font-size="14"><tspan fill="#e6edf3">-H </tspan><tspan fill="#a5d6ff">"Content-Type: application/json"</tspan><tspan fill="#e6edf3"> \</tspan></text>
+  <text x="61.6" y="230" fill="#e6edf3" font-family="monospace" font-size="14">-d '{"model":"qerlio-unloaded-stub","messages":[{"role":"user","content":"Hello"}]}'</text>
+  <text x="28" y="264" fill="#c9d1d9" font-family="monospace" font-size="14">{</text>
+  <text x="44.8" y="286" font-family="monospace" font-size="14"><tspan fill="#79c0ff">"object"</tspan><tspan fill="#c9d1d9">: </tspan><tspan fill="#a5d6ff">"chat.completion"</tspan><tspan fill="#c9d1d9">,</tspan></text>
+  <text x="44.8" y="308" font-family="monospace" font-size="14"><tspan fill="#79c0ff">"model"</tspan><tspan fill="#c9d1d9">: </tspan><tspan fill="#a5d6ff">"qerlio-unloaded-stub"</tspan><tspan fill="#c9d1d9">,</tspan></text>
+  <text x="44.8" y="330" font-family="monospace" font-size="14"><tspan fill="#79c0ff">"simulated"</tspan><tspan fill="#c9d1d9">: </tspan><tspan fill="#d2a8ff">true</tspan><tspan fill="#c9d1d9">,</tspan></text>
+  <text x="44.8" y="352" fill="#c9d1d9" font-family="monospace" font-size="14">"choices": [{</text>
+  <text x="61.6" y="374" fill="#c9d1d9" font-family="monospace" font-size="14">"message": {"role": "assistant", "content": "Hello from QERLIO Universal API Gateway!</text>
+  <text x="36.4" y="396" fill="#a5d6ff" font-family="monospace" font-size="14">[Simulated response: no model is currently loaded into the engine.]"},</text>
+  <text x="61.6" y="418" font-family="monospace" font-size="14"><tspan fill="#79c0ff">"finish_reason"</tspan><tspan fill="#c9d1d9">: </tspan><tspan fill="#a5d6ff">"stop"</tspan></text>
+  <text x="44.8" y="440" fill="#c9d1d9" font-family="monospace" font-size="14">}]</text>
+  <text x="28" y="462" fill="#c9d1d9" font-family="monospace" font-size="14">}</text>
+</svg>

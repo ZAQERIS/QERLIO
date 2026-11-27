@@ -1,5 +1,7 @@
 # QERLIO Runtime
 
+![Terminal session installing QERLIO, starting the local server on port 8787, and posting one request to the OpenAI-compatible /v1/chat/completions endpoint](docs/assets/qerlio-terminal.svg)
+
 [![CI](https://github.com/ZAQERIS/QERLIO/actions/workflows/ci.yml/badge.svg)](https://github.com/ZAQERIS/QERLIO/actions)
 [![Release](https://img.shields.io/github/v/release/ZAQERIS/QERLIO?color=blue)](https://github.com/ZAQERIS/QERLIO/releases)
 [![License](https://img.shields.io/badge/license-Apache--2.0-green.svg)](LICENSE)
@@ -9,6 +11,15 @@
 [![Architectures](https://img.shields.io/badge/architectures-1%20tested%20%7C%20183%20experimental-blueviolet.svg)](registry/model_architectures.json)
 [![Universal Gateway](https://img.shields.io/badge/gateway-OpenAI%20%7C%20Anthropic%20%7C%20Ollama-purple.svg)](server/local_api/)
 [![Agent Mode](https://img.shields.io/badge/agents-ReAct%20%7C%20Tri--Agent%20Sandbox-emerald.svg)](core/agent/)
+
+QERLIO is a local-first adaptive AI inference runtime that exposes local HTTP servers compatible with the OpenAI, Anthropic, and Ollama APIs.
+
+- Native GGUF v2/v3 loading and inference, with an optional C11 quantized GEMM (`Q4_K`, `Q6_K`, `Q8_0`, `F32`).
+- Local HTTP gateway on `127.0.0.1:8787`: OpenAI `POST /v1/chat/completions`, Anthropic `POST /v1/messages`, and Ollama `POST /api/generate` and `POST /api/chat`.
+- 184 catalogued architectures (1 tested, 183 experimental); verified bit-exact on Hermes 4.3 36B.
+- Sandboxed agent tools (`calculator`, `python_eval`, `file_search`).
+- Chat-template and tool-call parsing into OpenAI `tool_calls` and Anthropic `tool_use`.
+- KV-cache budget checks, temperature / top-k / top-p sampling, stop sequences, and mid-stream cancellation.
 
 > **Your AI. Your Device. Your Rules.**  
 > *Developed by ZAQERIS AI*
